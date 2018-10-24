@@ -1,0 +1,16 @@
+server {
+    # you can replace the domain below with your own domain or 127.0.0.1
+    #server_name www.trustytahr.com trustytahr.com; 
+    server_name 118.190.199.132;
+    listen 80;
+    root /usr/share/nginx/html;
+    gzip on;
+    access_log /var/log/nginx/default_access.log;
+    error_log /var/log/nginx/default_error.log ;
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass  lemp_fpm:9000;
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+    }
+}

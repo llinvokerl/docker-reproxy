@@ -1,0 +1,45 @@
+version: '3.2'
+services:
+    wordpress:
+        depends_on:
+            - mysql_instance
+            - redis_instance
+        networks:
+            - wp_net
+        image: wordpress
+        expose: 
+            - 80
+        environment:
+            VIRTUAL_HOST: 118.190.199.132
+            WORDPRESS_DB_HOST: mysql_instance:3306
+            WORDPRESS_DB_USER: 'wp'
+            WORDPRESS_DB_PASSWORD: '123456'
+        restart: always
+
+    mysql_instance:
+        image: mysql:8.0
+        networks:
+            - wp_net
+        environment: 
+            # set root password
+            MYSQL_ROOT_PASSWORD: "123456"
+            # create a database named "wordpress" and create a user along with its password
+            MYSQL_DATABASE: 'wordpress'
+            MYSQL_USER: 'wp'
+            MYSQL_PASSWORD: '123456'
+        restart: always
+
+    redis_instance:
+        image: redis
+        networks:
+            - wp_net
+        # start Redis instance with specified config file
+        command: redis-server /usr/local/etc/redis/redis.conf
+        volumes:
+            - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+        restart: always
+
+networks:
+    wp_net:
+        external:
+            name: nginxproxy_damn

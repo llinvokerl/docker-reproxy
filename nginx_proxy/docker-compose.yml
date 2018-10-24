@@ -1,0 +1,14 @@
+version: '3.2'
+services:
+    proxy_instance:
+        image: jwilder/nginx-proxy
+        ports:
+            - "80:80"
+        networks:
+            - damn
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+        restart: always
+
+networks:
+    damn:
